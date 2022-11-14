@@ -13,9 +13,6 @@ namespace CityInfo.API.Controllers
             var cities = new JsonResult(CitiesDataStore.Current.Cities);
             cities.StatusCode = 200;
             return new JsonResult(cities);
-
-            /*List<CityDto> cities = CitiesDataStore.Current.Cities;
-            return new JsonResult(cities);*/
         }
 
         [HttpGet("{id}")]
@@ -28,13 +25,6 @@ namespace CityInfo.API.Controllers
 
             return Ok(city);
         }
-
-        /*[HttpGet("{id}")]
-        public JsonResult GetCity(int id)
-        {
-            CityDto? city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == id);
-            return new JsonResult(city);
-        }*/
 
         [HttpPost()]
         public JsonResult GetSomethingelse()
