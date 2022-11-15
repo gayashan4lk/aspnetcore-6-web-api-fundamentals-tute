@@ -8,14 +8,10 @@ namespace CityInfo.API.Controllers
     public class CitiesController : ControllerBase
     {
         [HttpGet()]
-        public JsonResult GetCities()
+        public ActionResult GetCities()
         {
-            var cities = new JsonResult(CitiesDataStore.Current.Cities);
-            cities.StatusCode = 200;
-            return new JsonResult(cities);
-
-            /*List<CityDto> cities = CitiesDataStore.Current.Cities;
-            return new JsonResult(cities);*/
+            var cities = CitiesDataStore.Current.Cities;
+            return Ok(cities);
         }
 
         [HttpGet("{id}")]
@@ -23,26 +19,19 @@ namespace CityInfo.API.Controllers
         {
             var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == id);
 
-            if(city == null)
+            if (city == null)
                 return NotFound();
 
             return Ok(city);
         }
 
-        /*[HttpGet("{id}")]
-        public JsonResult GetCity(int id)
-        {
-            CityDto? city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == id);
-            return new JsonResult(city);
-        }*/
-
-        [HttpPost()]
-        public JsonResult GetSomethingelse()
+        [HttpPost("{data}")]
+        public JsonResult GetSomethingelse(string data)
         {
             return new JsonResult(
                 new List<object>
                 {
-                    new {Content= "ooohh"},
+                    new {Content= data},
                     new {Content= "hohoho"}
                 });
         }
