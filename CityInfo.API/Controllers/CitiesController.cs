@@ -24,16 +24,5 @@ namespace CityInfo.API.Controllers
 
             return Ok(city);
         }
-
-        [HttpPost("{data}")]
-        public JsonResult GetSomethingelse(string data)
-        {
-            return new JsonResult(
-                new List<object>
-                {
-                    new {Content= data},
-                    new {Content= "hohoho"}
-                });
-        }
     }
 }
