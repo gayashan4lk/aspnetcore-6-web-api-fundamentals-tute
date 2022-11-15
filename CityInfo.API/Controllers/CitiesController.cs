@@ -20,19 +20,19 @@ namespace CityInfo.API.Controllers
         {
             var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == id);
 
-            if(city == null)
+            if (city == null)
                 return NotFound();
 
             return Ok(city);
         }
 
-        [HttpPost()]
-        public JsonResult GetSomethingelse()
+        [HttpPost("{data}")]
+        public JsonResult GetSomethingelse(string data)
         {
             return new JsonResult(
                 new List<object>
                 {
-                    new {Content= "ooohh"},
+                    new {Content= data},
                     new {Content= "hohoho"}
                 });
         }
