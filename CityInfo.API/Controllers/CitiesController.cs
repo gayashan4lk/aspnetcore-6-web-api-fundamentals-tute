@@ -8,11 +8,10 @@ namespace CityInfo.API.Controllers
     public class CitiesController : ControllerBase
     {
         [HttpGet()]
-        public JsonResult GetCities()
+        public ActionResult GetCities()
         {
-            var cities = new JsonResult(CitiesDataStore.Current.Cities);
-            cities.StatusCode = 200;
-            return new JsonResult(cities);
+            var cities = CitiesDataStore.Current.Cities;
+            return Ok(cities);
         }
 
         [HttpGet("{id}")]
