@@ -24,5 +24,5 @@ namespace CityInfo.API.Controllers
 
             return Ok(city);
         }
-    }
+    } 
 }
