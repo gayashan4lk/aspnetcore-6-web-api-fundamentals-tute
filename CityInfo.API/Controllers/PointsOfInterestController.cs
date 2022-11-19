@@ -1,5 +1,6 @@
 ﻿using CityInfo.API.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CityInfo.API.Controllers
@@ -62,6 +63,48 @@ namespace CityInfo.API.Controllers
                     pointId = newPointOfInterest.Id,
                 }
                 ,newPointOfInterest);
+        }
+
+        [HttpPut("{PointOfInterestId}")]
+        public ActionResult UpdatePointOfInterest(int cityId, int pointOfInterestId, PointOfInterestForUpdateDto pointOfInterst)
+        {
+            var city = CitiesDataStore.Current.Cities.FirstOrDefault(x => x.Id == cityId);
+            if (city == null) return NotFound();
+
+            var pointToUpdate = city.PointsOfInterest.FirstOrDefault(x => x.Id == pointOfInterestId);
+            if (pointToUpdate == null) return NotFound();
+
+            pointToUpdate.Name = pointOfInterst.Name;
+            pointToUpdate.Description = pointOfInterst.Description;
+
+            return NoContent();
+        }
+
+        [HttpPatch("{PointOfInterestId}")]
+        public ActionResult UpdatePointOfInterest(int cityId, int pointOfInterestId, JsonPatchDocument<PointOfInterestForUpdateDto> patchDocument)
+        {
+            var city = CitiesDataStore.Current.Cities.FirstOrDefault(x => x.Id == cityId);
+            if (city == null) return NotFound();
+
+            var pointFromStore = city.PointsOfInterest.FirstOrDefault(x => x.Id == pointOfInterestId);
+            if (pointFromStore == null) return NotFound();
+
+            var pointToPatch = new PointOfInterestForUpdateDto()
+            {
+                Name = pointFromStore.Name,
+                Description = pointFromStore.Description,
+            };
+
+            patchDocument.ApplyTo(pointToPatch, ModelState);
+
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            if (!TryValidateModel(pointToPatch)) return BadRequest(ModelState);
+
+            pointFromStore.Name = pointToPatch.Name;
+            pointFromStore.Description = pointToPatch.Description;
+
+            return NoContent();
         }
     }
 }
