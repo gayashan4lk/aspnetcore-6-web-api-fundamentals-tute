@@ -11,7 +11,7 @@ namespace CityInfo.API.Controllers
 
         public CitiesController(ILogger<CitiesController> logger)
         {
-            this.logger = logger;
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         [HttpGet()]

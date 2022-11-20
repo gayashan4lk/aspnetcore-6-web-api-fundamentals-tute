@@ -14,7 +14,7 @@ namespace CityInfo.API.Controllers
 
         public PointsOfInterestController(IMailService mailService)
         {
-            this.mailService = mailService;
+            this.mailService = mailService ?? throw new ArgumentNullException(nameof(mailService));
         }
 
         [HttpGet()]
