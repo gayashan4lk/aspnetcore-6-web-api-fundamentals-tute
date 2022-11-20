@@ -17,22 +17,38 @@ namespace CityInfo.API.Controllers
         [HttpGet()]
         public ActionResult GetCities()
         {
-            var cities = CitiesDataStore.Current.Cities;
-            return Ok(cities);
+            try
+            {
+                var cities = CitiesDataStore.Current.Cities;
+                return Ok(cities);
+            }
+            catch (Exception ex)
+            {
+                logger.LogCritical("Exception occured while getting cities.", ex);
+                return StatusCode(500, "A server error occured while handling your request.");
+            }
         }
 
         [HttpGet("{id}")]
         public ActionResult<CityDto> GetCity(int id)
         {
-            var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == id);
-
-            if (city == null)
+            try
             {
-                logger.LogInformation($"City with id {id} is not found.");
-                return NotFound();
-            }
+                var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == id);
 
-            return Ok(city);
+                if (city == null)
+                {
+                    logger.LogInformation($"City with id {id} is not found.");
+                    return NotFound();
+                }
+
+                return Ok(city);
+            }
+            catch (Exception ex)
+            {
+                logger.LogCritical($"Exception occured while getting the city with id : {id}.", ex);
+                return StatusCode(500, "A server error occured while handling your request.");
+            }
         }
     } 
 }
