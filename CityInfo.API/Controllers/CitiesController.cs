@@ -8,10 +8,12 @@ namespace CityInfo.API.Controllers
     public class CitiesController : ControllerBase
     {
         private readonly ILogger<CitiesController> logger;
+        private readonly CitiesDataStore citiesDataStore;
 
-        public CitiesController(ILogger<CitiesController> logger)
+        public CitiesController(ILogger<CitiesController> logger, CitiesDataStore citiesDataStore)
         {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            this.citiesDataStore = citiesDataStore ?? throw new ArgumentNullException(nameof(citiesDataStore));
         }
 
         [HttpGet()]
@@ -19,7 +21,7 @@ namespace CityInfo.API.Controllers
         {
             try
             {
-                var cities = CitiesDataStore.Current.Cities;
+                var cities = citiesDataStore.Cities;
                 return Ok(cities);
             }
             catch (Exception ex)
@@ -34,7 +36,7 @@ namespace CityInfo.API.Controllers
         {
             try
             {
-                var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == id);
+                var city = citiesDataStore.Cities.FirstOrDefault(c => c.Id == id);
 
                 if (city == null)
                 {
