@@ -10,9 +10,9 @@ namespace CityInfo.API.Controllers
     [ApiController]
     public class PointsOfInterestController : ControllerBase
     {
-        private readonly LocalMailService mailService;
+        private readonly IMailService mailService;
 
-        public PointsOfInterestController(LocalMailService mailService)
+        public PointsOfInterestController(IMailService mailService)
         {
             this.mailService = mailService;
         }
