@@ -1,4 +1,5 @@
-﻿using CityInfo.API.Models;
+﻿using AutoMapper;
+using CityInfo.API.Models;
 using CityInfo.API.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,12 +12,14 @@ namespace CityInfo.API.Controllers
         private readonly ILogger<CitiesController> logger;
         private readonly CitiesDataStore citiesDataStore;
         private readonly ICityInfoRepository cityInfoRepository;
+        private readonly IMapper mapper;
 
-        public CitiesController(ILogger<CitiesController> logger, CitiesDataStore citiesDataStore, ICityInfoRepository cityInfoRepository)
+        public CitiesController(ILogger<CitiesController> logger, CitiesDataStore citiesDataStore, ICityInfoRepository cityInfoRepository, IMapper mapper)
         {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.citiesDataStore = citiesDataStore ?? throw new ArgumentNullException(nameof(citiesDataStore));
             this.cityInfoRepository = cityInfoRepository ?? throw new ArgumentNullException(nameof(cityInfoRepository));
+            this.mapper = mapper;
         }
 
         [HttpGet()]
@@ -25,8 +28,8 @@ namespace CityInfo.API.Controllers
             try
             {
                 var cityEntities = await cityInfoRepository.GetCitiesAsync();
-                var results = new List<CityWithoutPointOfInterestDto>();
-                foreach (var cityEntity in cityEntities)
+                //var results = new List<CityWithoutPointOfInterestDto>();
+                /*foreach (var cityEntity in cityEntities)
                 {
                     results.Add(new CityWithoutPointOfInterestDto
                     {
@@ -34,8 +37,8 @@ namespace CityInfo.API.Controllers
                         Name = cityEntity.Name,
                         Description = cityEntity.Description,
                     });
-                }
-                return Ok(results);
+                }*/
+                return Ok(mapper.Map<IEnumerable<CityWithoutPointOfInterestDto>>(cityEntities));
             }
             catch (Exception ex)
             {
