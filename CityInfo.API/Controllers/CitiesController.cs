@@ -1,4 +1,5 @@
 ﻿using CityInfo.API.Models;
+using CityInfo.API.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CityInfo.API.Controllers
@@ -9,20 +10,32 @@ namespace CityInfo.API.Controllers
     {
         private readonly ILogger<CitiesController> logger;
         private readonly CitiesDataStore citiesDataStore;
+        private readonly ICityInfoRepository cityInfoRepository;
 
-        public CitiesController(ILogger<CitiesController> logger, CitiesDataStore citiesDataStore)
+        public CitiesController(ILogger<CitiesController> logger, CitiesDataStore citiesDataStore, ICityInfoRepository cityInfoRepository)
         {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.citiesDataStore = citiesDataStore ?? throw new ArgumentNullException(nameof(citiesDataStore));
+            this.cityInfoRepository = cityInfoRepository ?? throw new ArgumentNullException(nameof(cityInfoRepository));
         }
 
         [HttpGet()]
-        public ActionResult GetCities()
+        public async Task<ActionResult<IEnumerable<CityWithoutPointOfInterestDto>>> GetCities()
         {
             try
             {
-                var cities = citiesDataStore.Cities;
-                return Ok(cities);
+                var cityEntities = await cityInfoRepository.GetCitiesAsync();
+                var results = new List<CityWithoutPointOfInterestDto>();
+                foreach (var cityEntity in cityEntities)
+                {
+                    results.Add(new CityWithoutPointOfInterestDto
+                    {
+                        Id = cityEntity.CityId,
+                        Name = cityEntity.Name,
+                        Description = cityEntity.Description,
+                    });
+                }
+                return Ok(results);
             }
             catch (Exception ex)
             {
