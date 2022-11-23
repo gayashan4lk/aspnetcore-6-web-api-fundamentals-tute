@@ -28,16 +28,6 @@ namespace CityInfo.API.Controllers
             try
             {
                 var cityEntities = await cityInfoRepository.GetCitiesAsync();
-                //var results = new List<CityWithoutPointOfInterestDto>();
-                /*foreach (var cityEntity in cityEntities)
-                {
-                    results.Add(new CityWithoutPointOfInterestDto
-                    {
-                        Id = cityEntity.CityId,
-                        Name = cityEntity.Name,
-                        Description = cityEntity.Description,
-                    });
-                }*/
                 return Ok(mapper.Map<IEnumerable<CityWithoutPointOfInterestDto>>(cityEntities));
             }
             catch (Exception ex)
