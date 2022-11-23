@@ -18,7 +18,7 @@ namespace CityInfo.API.Services
             return await context.Cities.OrderBy(c => c.Name).ToListAsync();
         }
 
-        public async Task<City?> GetCity(int cityId, bool includePointsOfInterest)
+        public async Task<City?> GetCityAsync(int cityId, bool includePointsOfInterest)
         {
             if(includePointsOfInterest) return await context.Cities
                     .Include(c => c.PointsOfInterest)
@@ -26,6 +26,11 @@ namespace CityInfo.API.Services
                     .FirstOrDefaultAsync();
 
             return await context.Cities.Where(c => c.CityId == cityId).FirstOrDefaultAsync();
+        }
+
+        public async Task<bool> IsCityExistAsync(int cityId)
+        {
+            return await context.Cities.AnyAsync(c => c.CityId == cityId);
         }
 
         public async Task<IEnumerable<PointOfInterest>> GetPointsOfInterestForCityAsync(int cityId)
