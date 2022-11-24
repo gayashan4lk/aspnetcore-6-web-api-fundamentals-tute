@@ -8,6 +8,7 @@ namespace CityInfo.API.Profiles
         {
             CreateMap<Entities.City, Models.CityWithoutPointOfInterestDto>()
                 .ForMember(dest=> dest.Id, opt => opt.MapFrom(src => src.CityId));
+
             CreateMap<Entities.City, Models.CityDto>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.CityId));
         }

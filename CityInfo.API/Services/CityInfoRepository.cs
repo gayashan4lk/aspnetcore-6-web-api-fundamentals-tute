@@ -20,10 +20,10 @@ namespace CityInfo.API.Services
 
         public async Task<City?> GetCityAsync(int cityId, bool includePointsOfInterest)
         {
-            if(includePointsOfInterest) return await context.Cities
-                    .Include(c => c.PointsOfInterest)
-                    .Where(c => c.CityId == cityId)
-                    .FirstOrDefaultAsync();
+            if (includePointsOfInterest) return await context.Cities
+                     .Include(c => c.PointsOfInterest)
+                     .Where(c => c.CityId == cityId)
+                     .FirstOrDefaultAsync();
 
             return await context.Cities.Where(c => c.CityId == cityId).FirstOrDefaultAsync();
         }
@@ -31,6 +31,11 @@ namespace CityInfo.API.Services
         public async Task<bool> IsCityExistAsync(int cityId)
         {
             return await context.Cities.AnyAsync(c => c.CityId == cityId);
+        }
+
+        public async Task<bool> IsPointOfInterestExistAsync(int pointOfInterestId)
+        {
+            return await context.PointsOfInterest.AnyAsync(p => p.PointOfInterestId == pointOfInterestId);
         }
 
         public async Task<IEnumerable<PointOfInterest>> GetPointsOfInterestForCityAsync(int cityId)
@@ -60,6 +65,11 @@ namespace CityInfo.API.Services
         public async Task<bool> SaveChangesAsync()
         {
             return await context.SaveChangesAsync() >= 0 ;
+        }
+
+        public void DeletePointOfInterest(PointOfInterest pointOfInterest)
+        {
+            context.PointsOfInterest.Remove(pointOfInterest);
         }
     }
 }
