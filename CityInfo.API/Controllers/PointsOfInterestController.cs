@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CityInfo.API.Entities;
 using CityInfo.API.Models;
 using CityInfo.API.Services;
 using Microsoft.AspNetCore.Http;
@@ -75,28 +76,27 @@ namespace CityInfo.API.Controllers
         }
 
         [HttpPost]
-        public ActionResult<PointOfInterestDto> CreatePointOfInterest(int cityId, PointOfInterestForCreationDto pointOfInterestForCreation)
+        public async Task<ActionResult<PointOfInterestDto>> CreatePointOfInterest(int cityId, PointOfInterestForCreationDto pointOfInterestForCreation)
         {
-            /*var city = citiesDataStore.Cities.FirstOrDefault(x => x.Id == cityId);
-            if (city == null) return NotFound();
+            if(!await cityInfoRepository.IsCityExistAsync(cityId)) return NotFound();
+            var pointOfInterstEntity = mapper.Map<PointOfInterest>(pointOfInterestForCreation);
+            await cityInfoRepository.AddPointOfInterestForCityAsync(cityId, pointOfInterstEntity);
+            await cityInfoRepository.SaveChangesAsync();
 
-            var maxPointOfInterest = citiesDataStore.Cities.SelectMany(p => p.PointsOfInterest).Max(x => x.Id);
-
-            var newPointOfInterest = new PointOfInterestDto
-            {
-                Id = ++maxPointOfInterest,
-                Name = pointOfInterestForCreation.Name,
-                Description = pointOfInterestForCreation.Description
-            };
-
-            return CreatedAtRoute("getPointOfInterest",
+            // Any of two ways can be used to return the created point of interest
+            // Method 1
+            var createdPointOfInterest = mapper.Map<PointOfInterestDto>(pointOfInterstEntity);
+            return CreatedAtRoute("GetPointOfInterest",
                 new
                 {
                     cityId = cityId,
-                    pointId = newPointOfInterest.Id,
+                    pointId = createdPointOfInterest.Id,
                 },
-                newPointOfInterest);*/
-            return Ok(new PointOfInterestDto());
+                createdPointOfInterest);
+
+            // Method 2
+            /*var createdPointOfInterest = await cityInfoRepository.GetPointOfInterestForCityAsync(cityId, pointOfInterstEntity.PointOfInterestId);
+            return Ok(mapper.Map<PointOfInterestDto>(createdPointOfInterest));*/
         }
 
         [HttpPut("{PointOfInterestId}")]
