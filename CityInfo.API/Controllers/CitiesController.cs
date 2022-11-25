@@ -12,6 +12,7 @@ namespace CityInfo.API.Controllers
         private readonly ILogger<CitiesController> logger;
         private readonly ICityInfoRepository cityInfoRepository;
         private readonly IMapper mapper;
+        const int maxCitiesPageSize = 10;
 
         public CitiesController(ILogger<CitiesController> logger, ICityInfoRepository cityInfoRepository, IMapper mapper)
         {
@@ -21,11 +22,13 @@ namespace CityInfo.API.Controllers
         }
 
         [HttpGet()]
-        public async Task<ActionResult<IEnumerable<CityWithoutPointOfInterestDto>>> GetCities(string? name, string?searchQuery)
+        public async Task<ActionResult<IEnumerable<CityWithoutPointOfInterestDto>>> GetCities(string? name, string?searchQuery, int pageSize = 10, int pageNumber = 1)
         {
             try
             {
-                var cityEntities = await cityInfoRepository.GetCitiesAsync(name, searchQuery);
+                if (pageSize > maxCitiesPageSize)
+                    pageSize = maxCitiesPageSize;
+                var cityEntities = await cityInfoRepository.GetCitiesAsync(name, searchQuery, pageSize, pageNumber);
                 return Ok(mapper.Map<IEnumerable<CityWithoutPointOfInterestDto>>(cityEntities));
             }
             catch (Exception ex)
