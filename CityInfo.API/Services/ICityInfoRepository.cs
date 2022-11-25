@@ -5,7 +5,7 @@ namespace CityInfo.API.Services
     public interface ICityInfoRepository
     {
         Task<IEnumerable<City>> GetCitiesAsync();
-        Task<IEnumerable<City>> GetCitiesAsync(string? name);
+        Task<IEnumerable<City>> GetCitiesAsync(string? name, string? searchQuery);
         Task<City?> GetCityAsync(int cityId, bool includePointsOfInterest);
         Task<bool> IsCityExistAsync(int cityId);
         Task<bool> IsPointOfInterestExistAsync(int pointOfInterestId);
