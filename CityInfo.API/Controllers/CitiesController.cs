@@ -2,6 +2,7 @@
 using CityInfo.API.Models;
 using CityInfo.API.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace CityInfo.API.Controllers
 {
@@ -12,6 +13,7 @@ namespace CityInfo.API.Controllers
         private readonly ILogger<CitiesController> logger;
         private readonly ICityInfoRepository cityInfoRepository;
         private readonly IMapper mapper;
+        const int maxCitiesPageSize = 10;
 
         public CitiesController(ILogger<CitiesController> logger, ICityInfoRepository cityInfoRepository, IMapper mapper)
         {
@@ -21,11 +23,17 @@ namespace CityInfo.API.Controllers
         }
 
         [HttpGet()]
-        public async Task<ActionResult<IEnumerable<CityWithoutPointOfInterestDto>>> GetCities()
+        public async Task<ActionResult<IEnumerable<CityWithoutPointOfInterestDto>>> GetCities(string? name, string?searchQuery, int pageSize = 10, int pageNumber = 1)
         {
             try
             {
-                var cityEntities = await cityInfoRepository.GetCitiesAsync();
+                if (pageSize > maxCitiesPageSize)
+                    pageSize = maxCitiesPageSize;
+                
+                var (cityEntities, paginationMetadata) = await cityInfoRepository.GetCitiesAsync(name, searchQuery, pageSize, pageNumber);
+
+                Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(paginationMetadata));
+
                 return Ok(mapper.Map<IEnumerable<CityWithoutPointOfInterestDto>>(cityEntities));
             }
             catch (Exception ex)
