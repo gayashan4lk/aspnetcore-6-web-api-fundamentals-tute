@@ -60,6 +60,15 @@ builder.Services.AddAuthentication("Bearer").AddJwtBearer(options =>
     }
 );
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("MustBeFromNewYorkCity", policy =>
+    {
+        policy.RequireAuthenticatedUser();
+        policy.RequireClaim("city", "New York City");
+    });
+});
+
 
 var app = builder.Build();
 
