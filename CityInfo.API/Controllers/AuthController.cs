@@ -88,7 +88,7 @@ namespace CityInfo.API.Controllers
                 For demo purposes, we assume the credentials are valid, and return a user detials.
             */
             // return a new CityInfoUser (Values would normally come for your user database/table)
-            return new CityInfoUser(1, userName ?? "", "Joey", "Tribbiani", "New York");
+            return new CityInfoUser(1, userName ?? "", "Joey", "Tribbiani", "New York City");
         }
     }
 }
