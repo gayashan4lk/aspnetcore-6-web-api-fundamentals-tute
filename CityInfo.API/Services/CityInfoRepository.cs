@@ -18,14 +18,14 @@ namespace CityInfo.API.Services
             return await context.Cities.OrderBy(c => c.Name).ToListAsync();
         }
 
-        public async Task<(IEnumerable<City>, PaginationMetadata)> GetCitiesAsync(string? name, string? searchQuery, int pageSize, int pageNumber)
+        public async Task<(IEnumerable<City>, PaginationMetadata)> GetCitiesAsync(string? cityName, string? searchQuery, int pageSize, int pageNumber)
         {
             var collection = context.Cities as IQueryable<City>;
 
-            if (!string.IsNullOrWhiteSpace(name))
+            if (!string.IsNullOrWhiteSpace(cityName))
             {
-                name = name.Trim();
-                collection = collection.Where(c => c.Name == name);
+                cityName = cityName.Trim();
+                collection = collection.Where(c => c.Name == cityName);
             }
 
             if (!string.IsNullOrWhiteSpace(searchQuery))
@@ -60,6 +60,11 @@ namespace CityInfo.API.Services
         public async Task<bool> IsCityExistAsync(int cityId)
         {
             return await context.Cities.AnyAsync(c => c.CityId == cityId);
+        }
+
+        public async Task<bool> IsCityNameMatchedCityId(int cityId, string? cityName)
+        {
+            return await context.Cities.AnyAsync(c => c.CityId == cityId && c.Name == cityName);
         }
 
         public async Task<bool> IsPointOfInterestExistAsync(int pointOfInterestId)
