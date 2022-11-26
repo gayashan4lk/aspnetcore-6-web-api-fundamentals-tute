@@ -5,9 +5,10 @@ using Microsoft.AspNetCore.StaticFiles;
 
 namespace CityInfo.API.Controllers
 {
-    [Route("api/files")]
-    //[Authorize]
     [ApiController]
+    //[Authorize]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/files")]
     public class FilesController : ControllerBase
     {
         private readonly FileExtensionContentTypeProvider fileExtentionContentTypeProvider;
