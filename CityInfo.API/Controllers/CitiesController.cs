@@ -53,7 +53,13 @@ namespace CityInfo.API.Controllers
         /// <param name="id">Id of the city to get</param>
         /// <param name="isPointsOfInterestIncluded">Whether or not to include the points of interest</param>
         /// <returns>IActionResult</returns>
+        /// <response code="200">OK : Returns the requested city</response>
+        /// <response code="500">InternalServerError : Exception occured while getting a city</response>
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetCity(int id, bool isPointsOfInterestIncluded = false)
         {
             try
