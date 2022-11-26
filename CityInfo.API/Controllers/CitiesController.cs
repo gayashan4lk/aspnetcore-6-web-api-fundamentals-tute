@@ -47,6 +47,12 @@ namespace CityInfo.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Get a city by id
+        /// </summary>
+        /// <param name="id">Id of the city to get</param>
+        /// <param name="isPointsOfInterestIncluded">Whether or not to include the points of interest</param>
+        /// <returns>IActionResult</returns>
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCity(int id, bool isPointsOfInterestIncluded = false)
         {

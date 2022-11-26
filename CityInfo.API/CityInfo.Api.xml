@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CityInfo.API</name>
+    </assembly>
+    <members>
+        <member name="M:CityInfo.API.Controllers.CitiesController.GetCity(System.Int32,System.Boolean)">
+            <summary>
+            Get a city by id
+            </summary>
+            <param name="id">Id of the city to get</param>
+            <param name="isPointsOfInterestIncluded">Whether or not to include the points of interest</param>
+            <returns>IActionResult</returns>
+        </member>
+        <member name="T:CityInfo.API.Models.CityWithoutPointOfInterestDto">
+            <summary>
+            A DTO for a city without points of interest
+            </summary>
+        </member>
+        <member name="P:CityInfo.API.Models.CityWithoutPointOfInterestDto.Id">
+            <summary>
+            Id of the city
+            </summary>
+        </member>
+        <member name="P:CityInfo.API.Models.CityWithoutPointOfInterestDto.Name">
+            <summary>
+            Name of the city
+            </summary>
+        </member>
+        <member name="P:CityInfo.API.Models.CityWithoutPointOfInterestDto.Description">
+            <summary>
+            Description of the city
+            </summary>
+        </member>
+    </members>
+</doc>

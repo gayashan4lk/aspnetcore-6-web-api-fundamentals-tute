@@ -6,6 +6,7 @@ using CityInfo.API.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Reflection;
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Debug()
@@ -18,7 +19,6 @@ var builder = WebApplication.CreateBuilder(args);
 //builder.Logging.AddConsole();
 builder.Host.UseSerilog();
 
-
 // Add services to the container.
 builder.Services.AddControllers( options =>
     {
@@ -28,7 +28,14 @@ builder.Services.AddControllers( options =>
     .AddXmlDataContractSerializerFormatters();
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(setupAction =>
+{
+    var xmlCommentsFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"; // CityInfo.API.xml
+    var xmlCommentsFullPath = Path.Combine(AppContext.BaseDirectory, xmlCommentsFile); // C:\Users\ErangaGayashanBISTEC\workspaces\aspnetcore\aspnetcore-6-wep-api-fundamentals\CityInfo\CityInfo.API\bin\Debug\net6.0\CityInfo.API.xml
+    
+    setupAction.IncludeXmlComments(xmlCommentsFullPath);
+});
+
 builder.Services.AddSingleton<FileExtensionContentTypeProvider>();
 
 #if DEBUG
@@ -79,6 +86,7 @@ builder.Services.AddApiVersioning(setupAction =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
