@@ -32,6 +32,9 @@ namespace CityInfo.API.Controllers
         {
             try
             {
+                // City of the user is got from token.
+                // Only if requesting city is matched with user's city, they are authorized to use endpoint.
+                
                 var cityName = User.Claims.FirstOrDefault(c => c.Type == "city")?.Value;
 
                 if (!await cityInfoRepository.IsCityNameMatchedCityId(cityId, cityName))
