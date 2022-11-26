@@ -9,9 +9,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CityInfo.API.Controllers
 {
-    [Route("api/cities/{cityId}/pointsofinterest")]
-    [Authorize(Policy = "MustBeFromNewYorkCity")]
     [ApiController]
+    //[Authorize(Policy = "MustBeFromNewYorkCity")]
+    [ApiVersion("2.0")]
+    [Route("api/v{version:apiVersion}/cities/{cityId}/pointsofinterest")]
     public class PointsOfInterestController : ControllerBase
     {
         private readonly IMailService mailService;
@@ -34,11 +35,11 @@ namespace CityInfo.API.Controllers
             {
                 // City of the user is got from token.
                 // Only if requesting city is matched with user's city, they are authorized to use endpoint.
-                
-                var cityName = User.Claims.FirstOrDefault(c => c.Type == "city")?.Value;
+
+                /*var cityName = User.Claims.FirstOrDefault(c => c.Type == "city")?.Value;
 
                 if (!await cityInfoRepository.IsCityNameMatchedCityId(cityId, cityName))
-                    return Forbid();
+                    return Forbid();*/
 
                 if (!await cityInfoRepository.IsCityExistAsync(cityId))
                 {
